@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Stock Universo Cookies</title>
+  <meta name="description" content="Control de stock diario de Universo Cookies">
+  <meta name="theme-color" content="#e8187c" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16121a" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Stock Cookies">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <div>
+        <div class="brand-title">UNIVERSO COOKIES</div>
+        <div class="brand-sub" id="headerSub">Stock diario</div>
+      </div>
+    </div>
+    <span class="save-status" id="saveStatus" aria-live="polite"></span>
+  </header>
+
+  <main id="main">
+    <!-- PLANILLA -->
+    <section class="view view-sheet active" id="view-sheet" aria-label="Planilla del día">
+      <div class="sheet-toolbar">
+        <div class="date-row">
+          <button class="icon-btn" id="prevDay" aria-label="Día anterior">‹</button>
+          <label class="date-field">
+            <span>FECHA</span>
+            <input type="date" id="dateInput">
+          </label>
+          <button class="icon-btn" id="nextDay" aria-label="Día siguiente">›</button>
+          <button class="btn btn-small btn-ghost" id="todayBtn">Hoy</button>
+        </div>
+        <div class="mode-row" id="modeRow">
+          <div class="segmented" role="tablist" aria-label="Vista">
+            <button role="tab" data-mode="full" class="seg active">Completa</button>
+            <button role="tab" data-mode="manana" class="seg">Mañana</button>
+            <button role="tab" data-mode="tarde" class="seg">Tarde</button>
+          </div>
+          <button class="btn btn-small btn-primary" id="pdfBtn">Descargar PDF</button>
+        </div>
+        <div class="banner" id="syncBanner" hidden>
+          <span>La lista de productos cambió desde que se creó esta planilla.</span>
+          <button class="btn btn-small" id="syncBtn">Actualizar</button>
+        </div>
+      </div>
+
+      <div class="create-card" id="createCard" hidden>
+        <h2>No hay planilla para el <span id="createDate"></span></h2>
+        <p id="createHint"></p>
+        <button class="btn btn-primary btn-block" id="createPrefill" hidden></button>
+        <button class="btn btn-block" id="createEmpty">Crear planilla vacía</button>
+      </div>
+
+      <div class="table-wrap" id="tableWrap" hidden>
+        <table class="sheet" id="sheetTable"></table>
+      </div>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section class="view" id="view-history" aria-label="Historial">
+      <div class="page">
+        <h1 class="page-title">Historial</h1>
+        <ul class="history-list" id="historyList"></ul>
+      </div>
+    </section>
+
+    <!-- PRODUCTOS -->
+    <section class="view" id="view-products" aria-label="Productos">
+      <div class="page">
+        <h1 class="page-title">Productos</h1>
+        <p class="muted">Los cambios se aplican a las planillas nuevas. Las planillas ya cargadas conservan sus productos y valores (podés actualizarlas desde la planilla).</p>
+        <div id="productsEditor"></div>
+      </div>
+    </section>
+
+    <!-- AJUSTES -->
+    <section class="view" id="view-settings" aria-label="Ajustes">
+      <div class="page">
+        <h1 class="page-title">Ajustes</h1>
+
+        <div class="card">
+          <h2>Planilla en blanco</h2>
+          <p class="muted">Genera la planilla vacía (sin fecha ni números) para imprimir y completar a mano.</p>
+          <button class="btn btn-block" id="blankPdfBtn">PDF en blanco</button>
+        </div>
+
+        <div class="card">
+          <h2>Copia de seguridad</h2>
+          <p class="muted">Exportá todos los datos (planillas y productos) a un archivo JSON. Guardalo en Archivos o mandátelo por WhatsApp/mail.</p>
+          <button class="btn btn-primary btn-block" id="exportBtn">Exportar datos (JSON)</button>
+          <label class="btn btn-block file-btn">
+            Importar datos (JSON)
+            <input type="file" id="importInput" accept="application/json,.json">
+          </label>
+          <p class="muted small">Al importar se reemplaza la lista de productos y se agregan/actualizan las planillas del archivo (las fechas repetidas se sobrescriben).</p>
+        </div>
+
+        <div class="card">
+          <h2>Almacenamiento</h2>
+          <p class="muted" id="storageInfo">Los datos se guardan solo en este dispositivo.</p>
+        </div>
+
+        <p class="muted small center" id="versionInfo"></p>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="Secciones">
+    <button class="tab active" data-view="sheet"><span class="tab-ico">▦</span><span>Planilla</span></button>
+    <button class="tab" data-view="history"><span class="tab-ico">☰</span><span>Historial</span></button>
+    <button class="tab" data-view="products"><span class="tab-ico">✎</span><span>Productos</span></button>
+    <button class="tab" data-view="settings"><span class="tab-ico">⚙</span><span>Ajustes</span></button>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="libs/jspdf.umd.min.js"></script>
+  <script src="libs/jspdf.plugin.autotable.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
