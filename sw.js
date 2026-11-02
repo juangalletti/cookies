@@ -1,6 +1,6 @@
 // Service worker: cachea toda la app para que funcione 100% offline.
 // Al cambiar cualquier archivo, subí la versión para que los iPhone bajen lo nuevo.
-const CACHE = 'universo-cookies-v1';
+const CACHE = 'dulce-jazmin-v2';
 
 const ASSETS = [
   './',

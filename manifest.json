@@ -1,7 +1,7 @@
 {
-  "name": "Stock Diario - Universo Cookies",
-  "short_name": "Stock Cookies",
-  "description": "Control de stock diario de Universo Cookies",
+  "name": "Stock Diario - Dulce Jazmín",
+  "short_name": "Stock Jazmín",
+  "description": "Control de stock diario de Dulce Jazmín",
   "lang": "es-AR",
   "start_url": "./",
   "scope": "./",

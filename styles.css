@@ -250,14 +250,35 @@ table.sheet {
   border-right: 2px solid var(--line-strong);
 }
 .sheet thead th.col-prod { z-index: 3; text-align: left; }
-.mode-manana .sheet .col-prod, .mode-tarde .sheet .col-prod { min-width: 150px; max-width: 46vw; }
 
-.sheet td.cell { min-width: 70px; width: 70px; }
-.mode-manana .sheet td.cell, .mode-tarde .sheet td.cell { width: auto; min-width: 64px; }
-.sheet thead th.num { min-width: 70px; }
+.sheet td.cell { min-width: 112px; width: 112px; }
+.sheet thead th.num { min-width: 112px; }
+/* Vistas por turno: 3 columnas que entran en el ancho del iPhone sin scroll lateral */
+.mode-manana table.sheet, .mode-tarde table.sheet { width: 100%; }
+.mode-manana .sheet .col-prod, .mode-tarde .sheet .col-prod { font-size: 12px; min-width: 92px; max-width: 120px; padding: 4px 6px; }
+.mode-manana .sheet td.cell, .mode-tarde .sheet td.cell,
+.mode-manana .sheet thead th.num, .mode-tarde .sheet thead th.num { min-width: 0; width: auto; }
+.mode-manana .step, .mode-tarde .step { width: 30px; }
+
+.stepper { display: flex; align-items: stretch; }
+.step {
+  flex: none;
+  width: 36px; height: 44px;
+  padding: 0;
+  border: 0; border-radius: 0;
+  background: transparent;
+  color: var(--pink);
+  font-size: 24px; font-weight: 700; line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none; -webkit-user-select: none;
+}
+.step.minus { color: var(--muted); }
+.step:active { background: var(--pink-soft); }
 
 .sheet input.num-in {
   display: block;
+  flex: 1; min-width: 0;
   width: 100%; height: 44px;
   border: 0; border-radius: 0;
   background: transparent;
@@ -382,5 +403,5 @@ table.sheet {
 
 @media (min-width: 700px) {
   .sheet .col-prod { min-width: 220px; max-width: 260px; }
-  .sheet td.cell, .sheet thead th.num { min-width: 96px; }
+  .sheet td.cell, .sheet thead th.num { min-width: 130px; }
 }

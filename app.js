@@ -1,5 +1,5 @@
 /* =========================================================
-   STOCK DIARIO DE UNIVERSO COOKIES
+   STOCK DIARIO DE DULCE JAZMÍN
    App offline (PWA) – datos en IndexedDB del dispositivo.
    ========================================================= */
 'use strict';
@@ -325,9 +325,13 @@ function renderTable() {
       html += `<tr class="prod${orphan}"><td class="col-prod">${esc(r.name)}</td>`;
       for (const c of cols) {
         const v = getVal(sheet, r.id, c);
-        html += `<td class="cell"><input class="num-in" type="text" inputmode="numeric" pattern="[0-9]*" enterkeyhint="next"
+        html += `<td class="cell"><div class="stepper">
+          <button type="button" class="step minus" data-step="-1" tabindex="-1" aria-label="Restar uno">−</button>
+          <input class="num-in" type="text" inputmode="numeric" pattern="[0-9]*" enterkeyhint="next"
           autocomplete="off" placeholder="–" aria-label="${esc(r.name)} – ${esc(COLUMNS[c].app)}"
-          data-id="${r.id}" data-col="${c}" value="${v === null ? '' : v}"></td>`;
+          data-id="${r.id}" data-col="${c}" value="${v === null ? '' : v}">
+          <button type="button" class="step plus" data-step="1" tabindex="-1" aria-label="Sumar uno">+</button>
+        </div></td>`;
       }
       html += '</tr>';
     }
@@ -351,6 +355,23 @@ function onCellInput(e) {
   if (!input.classList.contains('num-in')) return;
   const clean = input.value.replace(/[^0-9]/g, '').replace(/^0+(?=\d)/, '').slice(0, 6);
   if (clean !== input.value) input.value = clean;
+  setCell(input, clean);
+}
+
+// Botones + / −: suman o restan 1 (nunca menos de 0).
+function onStepClick(e) {
+  const btn = e.target.closest('.step');
+  if (!btn) return;
+  const input = btn.parentElement.querySelector('.num-in');
+  const current = input.value === '' ? null : Number(input.value);
+  const step = Number(btn.dataset.step);
+  if (step < 0 && !current) return;
+  const next = String((current || 0) + step);
+  input.value = next;
+  setCell(input, next);
+}
+
+function setCell(input, clean) {
   const id = input.dataset.id;
   const col = Number(input.dataset.col);
   const sheet = state.sheet;
@@ -509,7 +530,7 @@ function onProductsKey(e) {
 
 /* ---------- PDF (jsPDF + autotable) ---------- */
 
-const PDF_TITLE = 'STOCK DIARIO DE UNIVERSO COOKIES';
+const PDF_TITLE = 'STOCK DIARIO DE DULCE JAZMÍN';
 
 // sheet = null -> planilla en blanco con los productos visibles actuales.
 function buildPdf(sheet) {
@@ -598,7 +619,7 @@ function buildPdf(sheet) {
 }
 
 function pdfFileName(sheet) {
-  return sheet ? `Stock_Universo_Cookies_${fmtDate(sheet.date).replace(/\//g, '-')}.pdf` : 'Stock_Universo_Cookies_en_blanco.pdf';
+  return sheet ? `Stock_Dulce_Jazmin_${fmtDate(sheet.date).replace(/\//g, '-')}.pdf` : 'Stock_Dulce_Jazmin_en_blanco.pdf';
 }
 
 // En iPhone abre la hoja de compartir (Guardar en Archivos, WhatsApp…); si no se puede, descarga.
@@ -649,7 +670,7 @@ async function exportData() {
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const d = todayISO().split('-').reverse().join('-');
-  await shareOrDownload(blob, `Backup_Universo_Cookies_${d}.json`, 'Backup Universo Cookies');
+  await shareOrDownload(blob, `Backup_Dulce_Jazmin_${d}.json`, 'Backup Dulce Jazmín');
 }
 
 async function importData(file) {
@@ -717,6 +738,9 @@ function bindEvents() {
   const table = $('#sheetTable');
   table.addEventListener('input', onCellInput);
   table.addEventListener('keydown', onCellKey);
+  table.addEventListener('click', onStepClick);
+  // que tocar + / − no saque ni abra el teclado
+  table.addEventListener('pointerdown', (e) => { if (e.target.closest('.step')) e.preventDefault(); });
   table.addEventListener('focusin', (e) => { if (e.target.classList.contains('num-in')) e.target.select(); });
 
   $('#pdfBtn').addEventListener('click', () => downloadPdf(state.sheet));

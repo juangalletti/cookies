@@ -1,10 +1,11 @@
-# Stock Diario – Universo Cookies
+# Stock Diario – Dulce Jazmín
 
-Web app (PWA) para el control de stock diario de **UNIVERSO COOKIES**. Replica la planilla en papel, funciona **sin conexión** en el iPhone y guarda los datos **solo en el dispositivo** (IndexedDB).
+Web app (PWA) para el control de stock diario de **DULCE JAZMÍN**. Replica la planilla en papel, funciona **sin conexión** en el iPhone y guarda los datos **solo en el dispositivo** (IndexedDB).
 
 ## Qué hace
 
 - Una planilla por fecha, con autoguardado al escribir.
+- Cada celda se carga con el teclado numérico o con los botones **+** y **−** (suman o restan 1; nunca baja de 0).
 - Totales automáticos: **TOTAL Cookies + Flat** y **TOTAL Cuchareables**.
 - Al crear un día nuevo, opción de precargar el *Stock inicial turno mañana* con el *Stock al finalizar turno tarde* del último día cargado.
 - Vista **Completa** (7 columnas, productos fijos a la izquierda) y vistas **Mañana** / **Tarde**.
@@ -48,11 +49,11 @@ libs/           jsPDF 2.5.1 + jspdf-autotable 3.8.2 (locales, para PDF offline)
 
 ## Descargar el PDF en el iPhone
 
-En la planilla del día tocá **Descargar PDF**. Se abre la hoja de compartir: elegí **Guardar en Archivos**, **WhatsApp**, **Imprimir**, etc. En navegadores que no tienen hoja de compartir, el archivo se descarga directo como `Stock_Universo_Cookies_dd-mm-aaaa.pdf`.
+En la planilla del día tocá **Descargar PDF**. Se abre la hoja de compartir: elegí **Guardar en Archivos**, **WhatsApp**, **Imprimir**, etc. En navegadores que no tienen hoja de compartir, el archivo se descarga directo como `Stock_Dulce_Jazmin_dd-mm-aaaa.pdf`.
 
 ## Actualizar la app más adelante
 
-1. Cambiá los archivos y, en `sw.js`, subí la versión: `universo-cookies-v1` → `universo-cookies-v2`.
+1. Cambiá los archivos y, en `sw.js`, subí la versión: `dulce-jazmin-v2` → `dulce-jazmin-v3`.
 2. Subilos de nuevo al repositorio (**Add file → Upload files**, reemplazando).
 3. En el iPhone, abrí la app con internet, cerrala y volvé a abrirla: toma la versión nueva. Los datos no se pierden.
 
